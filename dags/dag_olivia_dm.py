@@ -10,8 +10,8 @@ from airflow.providers.microsoft.fabric.operators.run_item import MSFabricPipeli
 
 from airflow.models import Variable
 
-from sqldb_helpers import sensor_function
-from callback import success_callback, failure_callback
+from plugins.sqldb_helpers import sensor_function
+from pligins.callback import success_callback, failure_callback
 
 # =============================================================================
 # Configuration
