@@ -4,9 +4,9 @@ from airflow.sensors.python import PythonSensor
 from airflow.operators.python import PythonOperator
 from airflow.operators.bash import BashOperator
 
-from airflow.providers.dbt.cloud.operators.dbt import DbtCloudRunJobOperator
 from airflow.providers.microsoft.fabric.operators.run_item import MSFabricRunJobOperator
 from airflow.providers.microsoft.fabric.operators.run_item import MSFabricPipelineJobParameters
+from airflow.providers.dbt.cloud.operators.dbt import DbtCloudRunJobOperator
 
 from airflow.models import Variable
 
