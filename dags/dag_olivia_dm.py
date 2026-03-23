@@ -6,7 +6,7 @@ from airflow.operators.bash import BashOperator
 
 from airflow.providers.microsoft.fabric.operators.run_item import MSFabricRunJobOperator
 from airflow.providers.microsoft.fabric.operators.run_item import MSFabricPipelineJobParameters
-#from airflow.providers.dbt.cloud.operators.dbt import DbtCloudRunJobOperator
+from airflow.providers.dbt.cloud.operators.dbt import DbtCloudRunJobOperator
 
 from airflow.models import Variable
 
@@ -158,5 +158,5 @@ with DAG(
     # PARALLEL EXECUTION
     # ===================================================
 
-    wait_for_files >> [run_pipeline_SALESFORCE, run_pipeline_OLIVIA]# >> dbt_job_run
+    wait_for_files >> [run_pipeline_SALESFORCE, run_pipeline_OLIVIA] >> dbt_job_run
     
