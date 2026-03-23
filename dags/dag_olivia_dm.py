@@ -14,7 +14,11 @@ from plugins.sqldb_helpers import sensor_function
 from plugins.callback import success_callback, failure_callback
 
 # =============================================================================
-# Configuration
+# GIT Synced 
+# =============================================================================
+
+# =============================================================================
+# Configuration 
 # =============================================================================
 # DV connection
 ENV = 'dv' # development
