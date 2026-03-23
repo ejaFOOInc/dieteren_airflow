@@ -114,7 +114,7 @@ def sensor_function(FABRIC_CONN_ID, server :str, database :str, table_name :str,
                 query = f"SELECT COUNT(*) FROM {table_name}"
                 cursor.execute(query)
                 count = cursor.fetchone()[0]
-                logger.info(f"Query successful. Found {count} records.")
+                logger.info(f"Query successful. Found {count} records!")
                 return count > 0
     except Exception as e:
         logger.error(f"FAILED Database connection: {str(e)}\n{conn_str}")
