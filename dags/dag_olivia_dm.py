@@ -130,29 +130,29 @@ with DAG(
     DBT_ACCOUNT_ID = "175956220182744"
     DBT_OLIVIA_DM_JOB_ID = "175956220200805" 
     
-    # dbt_job_run = DbtCloudRunJobOperator(
-        #task_id = "run_dbt_job",
+    dbt_job_run = DbtCloudRunJobOperator(
+        task_id = "run_dbt_job",
 
         ## Airflow connection
-        #dbt_cloud_conn_id = "dbt_cloud",
+        dbt_cloud_conn_id = "dbt_cloud",
 
         ## dbt Cloud job
-        #job_id = DBT_OLIVIA_DM_JOB_ID,
+        job_id = DBT_OLIVIA_DM_JOB_ID,
 
         ## CLEAN PRODUCTION SETTINGS
-        #wait_for_termination = True,
-        #check_interval = 60,
-        #timeout = 600,
+        wait_for_termination = True,
+        check_interval = 60,
+        timeout = 600,
 
         ## saving workers
-        # deferrable = True,
+        deferrable = True,
 
         ## observability
         ## additional_run_config = {
         ##     "cause": "Triggered by Airflow"
         ## }
-        #trigger_reason = "Triggered from Fabric Airflow"
-    #)
+        trigger_reason = "Triggered from Fabric Airflow"
+    )
 
     # ===================================================
     # PARALLEL EXECUTION
