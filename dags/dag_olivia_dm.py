@@ -124,7 +124,7 @@ with DAG(
     # BRANCH OLIVIA
     # ===================================================
 
-    run_pipeline_SALESFORCE = fabric_run_pipeline(
+    run_pipeline_OLIVIA = fabric_run_pipeline(
         task_id="runPipelineTaskOLIVIA",
         fabric_conn_id=FABRIC_CONN_ID,
         workspace_id=WORKSPACE_ID,
