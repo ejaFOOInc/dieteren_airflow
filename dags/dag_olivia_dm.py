@@ -55,7 +55,7 @@ PL_Load_OLIVIA_ID = Variable.get(f"{ENV}_pipeline_Olivia_id")
 # PL_Load_OLIVIA_ID = Variable.get("qa_pipeline_Olivia_id")
 
 logger = logging.getLogger("airflow.task")
-logger.info(f"/nUse deferred for this task: {Variable.get("USE_DEFERRABLE")}/n")
+logger.info(f"/nUse deferred for this task: xxxxxxx/n")
 
 # =============================================================================
 # DAG Definition
