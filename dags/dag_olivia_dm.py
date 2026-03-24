@@ -150,7 +150,7 @@ with DAG(
         timeout = 600,
 
         ## saving workers
-        # deferrable = True,
+        deferrable = True,
 
         ## observability
         ## additional_run_config = {
