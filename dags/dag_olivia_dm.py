@@ -31,19 +31,19 @@ FABRIC_CONN_ID = Variable.get(f"{ENV}_envar_fabric_conn_id")
 # Configuration - polling system details
 # =============================================================================
 # WS_Technical_DV.DB-Technical
-SQL_SERVER = Variable.get("dv_sqlserver_dbtechnical")
-SQL_DATABASE = Variable.get("dv_sqlserver_dbtechnical_database")
-TABLE_NAME = Variable.get("dv_sqlserver_dbtechnical_databasetable")
+SQL_SERVER = Variable.get(f"{ENV}_sqlserver_dbtechnical")
+SQL_DATABASE = Variable.get(f"{ENV}_sqlserver_dbtechnical_database")
+TABLE_NAME = Variable.get(f"{ENV}_sqlserver_dbtechnical_databasetable")
 
 # =============================================================================
 # Configuration - Fabric Pipeline details
 # =============================================================================
 # WS_Analytical_Raw_DV
-WORKSPACE_ID = Variable.get("dv_airflow_workspace_id")
+WORKSPACE_ID = Variable.get(f"{ENV}_airflow_workspace_id")
 # WS_Analytical_Raw_DV.Source.SALESFORCE.PL_Load_SALESFORCE
-PL_Load_SALESFORCE_ID = Variable.get("dv_pipeline_Salesforce_id")
+PL_Load_SALESFORCE_ID = Variable.get(f"{ENV}_pipeline_Salesforce_id")
 # WS_Analytical_Raw_DV.Source.OLIVIA.PL_Load_OLIVIA
-PL_Load_OLIVIA_ID = Variable.get("dv_pipeline_Olivia_id")
+PL_Load_OLIVIA_ID = Variable.get(f"{ENV}_pipeline_Olivia_id")
 # WS_Analytical_Raw_QA
 # WORKSPACE_ID = Variable.get("qa_airflow_workspace_id")
 # WS_Analytical_Raw_QA.Source.SALESFORCE.PL_Load_SALESFORCE
