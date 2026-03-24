@@ -82,7 +82,8 @@ with DAG(
             'FABRIC_CONN_ID':FABRIC_CONN_ID,
             'server': SQL_SERVER,
             'database': SQL_DATABASE,
-            'table_name': TABLE_NAME
+            'table_name': TABLE_NAME,
+            'file_count_limit': 2
         },
         # mode = 'reschedule',
         poke_interval = 5,

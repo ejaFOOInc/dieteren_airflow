@@ -45,7 +45,7 @@ def get_connection_string(server :str, database :str, isEncryptedConnection :boo
         f"Connection Timeout={connectionTimeout};"
     )
 
-def sensor_function(FABRIC_CONN_ID, server :str, database :str, table_name :str, **context):
+def sensor_function(FABRIC_CONN_ID, server :str, database :str, table_name :str, file_count_limit :int, **context):
     """
     
     Args:
@@ -115,7 +115,7 @@ def sensor_function(FABRIC_CONN_ID, server :str, database :str, table_name :str,
                 cursor.execute(query)
                 count = cursor.fetchone()[0]
                 logger.info(f"Query successful. Found {count} records!")
-                return count > 0
+                return count >= file_count_limit
     except Exception as e:
         logger.error(f"FAILED Database connection: {str(e)}\n{conn_str}")
         raise
