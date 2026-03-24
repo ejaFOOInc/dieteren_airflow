@@ -12,6 +12,7 @@ from airflow.models import Variable
 
 from plugins.sqldb_helpers import sensor_function
 from plugins.callback import success_callback, failure_callback
+from plugins.fabric_run_pipeline import fabric_run_pipeline
 
 # =============================================================================
 # GIT Synced 
@@ -94,20 +95,30 @@ with DAG(
     # BRANCH SALESFORCE
     # ===================================================
 
-    run_pipeline_SALESFORCE = MSFabricRunJobOperator(
+    run_pipeline_SALESFORCE = fabric_run_pipeline(
         task_id="runPipelineTaskSALESFORCE",
         fabric_conn_id=FABRIC_CONN_ID,
-        workspace_id=WORKSPACE_ID,  # WS_Analytical_Raw_[DV, QA]
-        item_id=PL_Load_SALESFORCE_ID,  # PL_Load_SALESFORCE
-        job_type="Pipeline",
+        workspace_id=WORKSPACE_ID,
+        item_id=PL_Load_SALESFORCE_ID,
         timeout=600,
-        deferrable=Variable.get("USE_DEFERRABLE"),
-        job_params= MSFabricPipelineJobParameters()
-            .set_parameter("SourceName", "SALESFORCE")
-            .set_parameter("ApplicationName", "SALESFORCE")
-            .set_parameter("ObjectName", "[object Object]")
-            .to_json()
+        deferrable=False,
+        parm_SourceName="SALESFORCE",
+        parm_ApplicationName="SALESFORCE"
     )
+    # run_pipeline_SALESFORCE = MSFabricRunJobOperator(
+    #     task_id="runPipelineTaskSALESFORCE",
+    #     fabric_conn_id=FABRIC_CONN_ID,
+    #     workspace_id=WORKSPACE_ID,  # WS_Analytical_Raw_[DV, QA]
+    #     item_id=PL_Load_SALESFORCE_ID,  # PL_Load_SALESFORCE
+    #     job_type="Pipeline",
+    #     timeout=600,
+    #     deferrable=Variable.get("USE_DEFERRABLE"),
+    #     job_params= MSFabricPipelineJobParameters()
+    #         .set_parameter("SourceName", "SALESFORCE")
+    #         .set_parameter("ApplicationName", "SALESFORCE")
+    #         .set_parameter("ObjectName", "[object Object]")
+    #         .to_json()
+    # )
 
     # ===================================================
     # BRANCH OLIVIA
