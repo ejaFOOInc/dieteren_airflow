@@ -1,6 +1,8 @@
 from airflow.providers.microsoft.fabric.operators.run_item import MSFabricRunJobOperator
 from airflow.providers.microsoft.fabric.operators.run_item import MSFabricPipelineJobParameters
 
+import logging
+
 def fabric_run_pipeline(
         task_id :str,
         fabric_conn_id :str,
@@ -11,6 +13,10 @@ def fabric_run_pipeline(
         parm_SourceName :str,
         parm_ApplicationName :str
 ):
+    
+    logger = logging.getLogger("airflow.task")
+    logger.info(f"Use deferred for this task: {deferrable}")
+    
     return MSFabricRunJobOperator(
         task_id=task_id,
         fabric_conn_id=fabric_conn_id,

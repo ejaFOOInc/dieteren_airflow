@@ -101,7 +101,7 @@ with DAG(
         workspace_id=WORKSPACE_ID,
         item_id=PL_Load_SALESFORCE_ID,
         timeout=600,
-        deferrable=False,
+        deferrable=Variable.get("USE_DEFERRABLE"),
         parm_SourceName="SALESFORCE",
         parm_ApplicationName="SALESFORCE"
     )
@@ -124,20 +124,31 @@ with DAG(
     # BRANCH OLIVIA
     # ===================================================
 
-    run_pipeline_OLIVIA= MSFabricRunJobOperator(
+    run_pipeline_SALESFORCE = fabric_run_pipeline(
         task_id="runPipelineTaskOLIVIA",
         fabric_conn_id=FABRIC_CONN_ID,
-        workspace_id=WORKSPACE_ID,  # WS_Analytical_Raw_[DV, QA]
-        item_id=PL_Load_OLIVIA_ID,  # PL_Load_OLIVIA
-        job_type="Pipeline",
+        workspace_id=WORKSPACE_ID,
+        item_id=PL_Load_OLIVIA_ID,
         timeout=600,
-        deferrable=Variable.get("USE_DEFERRABLE"),
-        job_params= MSFabricPipelineJobParameters()
-            .set_parameter("SourceName", "OLIVIA")
-            .set_parameter("ApplicationName", "OLIVIA")
-            .set_parameter("ObjectName", "[object Object]")
-            .to_json()
+        deferrable=Variable.get("USE_DEFERRED"),
+        parm_SourceName="OLIVIA",
+        parm_ApplicationName="OLIVIA"
     )
+
+    # run_pipeline_OLIVIA= MSFabricRunJobOperator(
+    #     task_id="runPipelineTaskOLIVIA",
+    #     fabric_conn_id=FABRIC_CONN_ID,
+    #     workspace_id=WORKSPACE_ID,  # WS_Analytical_Raw_[DV, QA]
+    #     item_id=PL_Load_OLIVIA_ID,  # PL_Load_OLIVIA
+    #     job_type="Pipeline",
+    #     timeout=600,
+    #     deferrable=Variable.get("USE_DEFERRABLE"),
+    #     job_params= MSFabricPipelineJobParameters()
+    #         .set_parameter("SourceName", "OLIVIA")
+    #         .set_parameter("ApplicationName", "OLIVIA")
+    #         .set_parameter("ObjectName", "[object Object]")
+    #         .to_json()
+    # )
 
     # ===================================================
     # BRANCH dbt refresh
@@ -161,7 +172,7 @@ with DAG(
         timeout = 600,
 
         ## saving workers
-        deferrable = Variable.get("USE_DEFERRABLE"),
+        deferrable = False,
 
         ## observability
         ## additional_run_config = {
