@@ -1,8 +1,10 @@
 import requests
 import json
 
-POWER_AUTOMATE_URL = ""
-DYNATRACE_URL = ""
+from airflow.models import Variable
+
+POWER_AUTOMATE_URL = Variable.get("dv_power_automate_url")
+DYNATRACE_URL = Variable.get("dv_dynatrace_url")
 
 def pa_post(context, message):
     dag_id = context["dag"].dag_id
@@ -26,7 +28,18 @@ def pa_post(context, message):
         headers={"Content-Type": "application/json"}
     )
 
-def dt_post(context, status):
+def dt_post(context, url, status):
+    """
+    Posts a logging message to a Dynatrace instance.
+
+    Parameters:
+    - context: 
+    - 
+    - status: the strings [SUCCESS, FAILURE] based on the caller of the function
+
+    Returns:
+
+    """
     dag_id = context["dag"].dag_id
     task_id = context["task_instance"].task_id
     token = ""
@@ -45,7 +58,7 @@ def dt_post(context, status):
 
     try:
         postResult = requests.post(
-            DYNATRACE_URL,
+            url,
             data=payload,
             headers=headers
         )
@@ -54,9 +67,9 @@ def dt_post(context, status):
         logger.error(f"ERROR - Request Post failed - {str(e)}")
 
 def success_callback(context):
-    pa_post(context, "SUCCESS")
-    dt_post(context, "SUCCESS")
+    pa_post(context, DYNATRACE_URL, "SUCCESS")
+    dt_post(context, DYNATRACE_URL, "SUCCESS")
 
 def failure_callback(context):
-    pa_post(context, "FAILURE")
-    dt_post(context, "FAILURE")
+    pa_post(context, DYNATRACE_URL, "FAILURE")
+    dt_post(context, DYNATRACE_URL, "FAILURE")

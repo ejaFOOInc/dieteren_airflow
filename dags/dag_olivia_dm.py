@@ -31,9 +31,9 @@ FABRIC_CONN_ID = Variable.get("dv_envar_fabric_conn_id")
 # Configuration - polling system details
 # =============================================================================
 # WS_Technical_DV.DB-Technical
-SQL_SERVER = "kf3ifkwnxglehp4wd4umfiuaxq-zdvvqhc3wrwebmpjjvnu4cbi7i.database.fabric.microsoft.com" 
-SQL_DATABASE = "DB_Technical-16d208af-97ef-40bb-97bf-444c7816c8a8"
-TABLE_NAME = "[input].[airflow_test]"
+SQL_SERVER = Variable.get("dv_sqlserver_dbtechnical")
+SQL_DATABASE = Variable.get("dv_sqlserver_dbtechnical_database")
+TABLE_NAME = Variable.get("dv_sqlserver_dbtechnical_databasetable")
 
 # =============================================================================
 # Configuration - Fabric Pipeline details
