@@ -102,6 +102,7 @@ with DAG(
         job_type="Pipeline",
         timeout=600,
         deferrable=True,
+        poll_interval_seconds=10,
         job_params= MSFabricPipelineJobParameters()
             .set_parameter("SourceName", "SALESFORCE")
             .set_parameter("ApplicationName", "SALESFORCE")
