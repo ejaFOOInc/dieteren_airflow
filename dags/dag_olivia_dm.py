@@ -39,17 +39,17 @@ TABLE_NAME = Variable.get("dv_sqlserver_dbtechnical_databasetable")
 # Configuration - Fabric Pipeline details
 # =============================================================================
 # WS_Analytical_Raw_DV
-WORKSPACE_ID = "80e57629-b40d-45e0-87f8-ef1f770aeffe"
+WORKSPACE_ID = Variable.get("dv_airflow_workspace_id")
 # WS_Analytical_Raw_DV.Source.SALESFORCE.PL_Load_SALESFORCE
-PL_Load_SALESFORCE_ID = "215a7e9e-fc51-45a8-bc21-8f0849455934"
+PL_Load_SALESFORCE_ID = Variable.get("dv_pipeline_Salesforce_id")
 # WS_Analytical_Raw_DV.Source.OLIVIA.PL_Load_OLIVIA
-PL_Load_OLIVIA_ID = "ab63ed58-6a39-40bf-97ce-b59699c7e64c"
+PL_Load_OLIVIA_ID = Variable.get("dv_pipeline_Olivia_id")
 # WS_Analytical_Raw_QA
-# WORKSPACE_ID = "32cf9972-bc27-440d-8389-f343208faa1d"
+# WORKSPACE_ID = Variable.get("qa_airflow_workspace_id")
 # WS_Analytical_Raw_QA.Source.SALESFORCE.PL_Load_SALESFORCE
-# PL_Load_SALESFORCE_ID = "273b4067-827c-4acf-b783-06a97b92abb6"
+# PL_Load_SALESFORCE_ID = Variable.get("qa_pipeline_Salesforce_id")
 # WS_Analytical_Raw_QA.Source.OLIVIA.PL_Load_OLIVIA
-# PL_Load_OLIVIA_ID = "b3620fef-edcd-437d-8287-9fbe34e27ea2"
+# PL_Load_OLIVIA_ID = Variable.get("qa_pipeline_Olivia_id")
 
 # =============================================================================
 # DAG Definition
@@ -131,8 +131,8 @@ with DAG(
     # BRANCH dbt refresh
     # ===================================================
 
-    DBT_ACCOUNT_ID = "175956220182744"
-    DBT_OLIVIA_DM_JOB_ID = "175956220200805" 
+    DBT_ACCOUNT_ID = Variable.get("dbt_account_id")
+    DBT_OLIVIA_DM_JOB_ID = Variable.get("dbt_Olivia_DM_jobid")
     
     # dbt_job_run = DbtCloudRunJobOperator(
     #     task_id = "run_dbt_job",
