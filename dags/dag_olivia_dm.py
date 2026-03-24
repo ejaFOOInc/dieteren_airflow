@@ -101,7 +101,7 @@ with DAG(
         item_id=PL_Load_SALESFORCE_ID,  # PL_Load_SALESFORCE
         job_type="Pipeline",
         timeout=600,
-        deferrable=True,
+        deferrable=Variable.get("USE_DEFERRABLE"),
         job_params= MSFabricPipelineJobParameters()
             .set_parameter("SourceName", "SALESFORCE")
             .set_parameter("ApplicationName", "SALESFORCE")
@@ -120,7 +120,7 @@ with DAG(
         item_id=PL_Load_OLIVIA_ID,  # PL_Load_OLIVIA
         job_type="Pipeline",
         timeout=600,
-        deferrable=True,
+        deferrable=Variable.get("USE_DEFERRABLE"),
         job_params= MSFabricPipelineJobParameters()
             .set_parameter("SourceName", "OLIVIA")
             .set_parameter("ApplicationName", "OLIVIA")
@@ -150,7 +150,7 @@ with DAG(
         timeout = 600,
 
         ## saving workers
-        deferrable = True,
+        deferrable = Variable.get("USE_DEFERRABLE"),
 
         ## observability
         ## additional_run_config = {
