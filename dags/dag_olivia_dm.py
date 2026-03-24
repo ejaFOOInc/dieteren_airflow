@@ -134,33 +134,33 @@ with DAG(
     DBT_ACCOUNT_ID = Variable.get("dbt_account_id")
     DBT_OLIVIA_DM_JOB_ID = Variable.get("dbt_Olivia_DM_jobid")
     
-    # dbt_job_run = DbtCloudRunJobOperator(
-    #     task_id = "run_dbt_job",
+    dbt_job_run = DbtCloudRunJobOperator(
+        task_id = "run_dbt_job",
 
-    #     ## Airflow connection
-    #     dbt_cloud_conn_id = "dbt_cloud",
+        ## Airflow connection
+        dbt_cloud_conn_id = "dbt_cloud",
 
-    #     ## dbt Cloud job
-    #     job_id = DBT_OLIVIA_DM_JOB_ID,
+        ## dbt Cloud job
+        job_id = DBT_OLIVIA_DM_JOB_ID,
 
-    #     ## CLEAN PRODUCTION SETTINGS
-    #     wait_for_termination = True,
-    #     check_interval = 60,
-    #     timeout = 600,
+        ## CLEAN PRODUCTION SETTINGS
+        wait_for_termination = True,
+        check_interval = 60,
+        timeout = 600,
 
-    #     ## saving workers
-    #     deferrable = True,
+        ## saving workers
+        deferrable = True,
 
-    #     ## observability
-    #     ## additional_run_config = {
-    #     ##     "cause": "Triggered by Airflow"
-    #     ## }
-    #     trigger_reason = "Triggered from Fabric Airflow"
-    # )
+        ## observability
+        ## additional_run_config = {
+        ##     "cause": "Triggered by Airflow"
+        ## }
+        trigger_reason = "Triggered from Fabric Airflow"
+    )
 
     # ===================================================
     # PARALLEL EXECUTION
     # ===================================================
 
-    wait_for_files >> [run_pipeline_SALESFORCE, run_pipeline_OLIVIA]# >> dbt_job_run
+    wait_for_files >> [run_pipeline_SALESFORCE, run_pipeline_OLIVIA] >> dbt_job_run
     
