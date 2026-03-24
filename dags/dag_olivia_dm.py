@@ -17,7 +17,7 @@ from plugins.callback import success_callback, failure_callback
 from plugins.fabric_run_pipeline import fabric_run_pipeline
 
 # =============================================================================
-# GIT Synced 
+# GIT Synced Airflow
 # =============================================================================
 
 # =============================================================================
