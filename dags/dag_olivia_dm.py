@@ -23,7 +23,7 @@ from plugins.callback import success_callback, failure_callback
 # DV connection
 ENV = 'dv' # development
 # FABRIC_CONN_ID = "demo-fabric-tenant"
-FABRIC_CONN_ID = Variable.get("dv_envar_fabric_conn_id")
+FABRIC_CONN_ID = Variable.get(f"{ENV}_envar_fabric_conn_id")
 # QA connection
 # FABRIC_CONN_ID = "fabric-tenant-QA"
 
