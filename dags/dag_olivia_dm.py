@@ -106,7 +106,7 @@ with DAG(
         workspace_id=WORKSPACE_ID,
         item_id=PL_Load_SALESFORCE_ID,
         timeout=600,
-        deferrable=Variable.get("USE_DEFERRABLE"),
+        deferrable=False,#Variable.get("USE_DEFERRABLE"),
         parm_SourceName="SALESFORCE",
         parm_ApplicationName="SALESFORCE"
     )
@@ -135,7 +135,7 @@ with DAG(
         workspace_id=WORKSPACE_ID,
         item_id=PL_Load_OLIVIA_ID,
         timeout=600,
-        deferrable=Variable.get("USE_DEFERRABLE"),
+        deferrable=False,#Variable.get("USE_DEFERRABLE"),
         parm_SourceName="OLIVIA",
         parm_ApplicationName="OLIVIA"
     )
