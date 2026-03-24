@@ -1,3 +1,5 @@
+import logging
+
 from datetime import datetime, timedelta
 from airflow import DAG
 from airflow.sensors.python import PythonSensor
@@ -51,6 +53,9 @@ PL_Load_OLIVIA_ID = Variable.get(f"{ENV}_pipeline_Olivia_id")
 # PL_Load_SALESFORCE_ID = Variable.get("qa_pipeline_Salesforce_id")
 # WS_Analytical_Raw_QA.Source.OLIVIA.PL_Load_OLIVIA
 # PL_Load_OLIVIA_ID = Variable.get("qa_pipeline_Olivia_id")
+
+logger = logging.getLogger("airflow.task")
+logger.info(f"/nUse deferred for this task: {Variable.get("USE_DEFERRABLE")}/n")
 
 # =============================================================================
 # DAG Definition
