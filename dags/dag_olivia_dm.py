@@ -95,31 +95,31 @@ with DAG(
     # BRANCH SALESFORCE
     # ===================================================
 
-    run_pipeline_SALESFORCE = fabric_run_pipeline(
-        task_id="runPipelineTaskSALESFORCE",
-        fabric_conn_id=FABRIC_CONN_ID,
-        workspace_id=WORKSPACE_ID,
-        item_id=PL_Load_SALESFORCE_ID,
-        timeout=600,
-        deferrable=False,#Variable.get("USE_DEFERRABLE"),
-        parm_SourceName="SALESFORCE",
-        parm_ApplicationName="SALESFORCE"
-    )
+    # run_pipeline_SALESFORCE = fabric_run_pipeline(
+    #     task_id="runPipelineTaskSALESFORCE",
+    #     fabric_conn_id=FABRIC_CONN_ID,
+    #     workspace_id=WORKSPACE_ID,
+    #     item_id=PL_Load_SALESFORCE_ID,
+    #     timeout=600,
+    #     deferrable=False,#Variable.get("USE_DEFERRABLE"),
+    #     parm_SourceName="SALESFORCE",
+    #     parm_ApplicationName="SALESFORCE"
+    # )
 
     # ===================================================
     # BRANCH OLIVIA
     # ===================================================
 
-    run_pipeline_OLIVIA = fabric_run_pipeline(
-        task_id="runPipelineTaskOLIVIA",
-        fabric_conn_id=FABRIC_CONN_ID,
-        workspace_id=WORKSPACE_ID,
-        item_id=PL_Load_OLIVIA_ID,
-        timeout=600,
-        deferrable=False,#Variable.get("USE_DEFERRABLE"),
-        parm_SourceName="OLIVIA",
-        parm_ApplicationName="OLIVIA"
-    )
+    # run_pipeline_OLIVIA = fabric_run_pipeline(
+    #     task_id="runPipelineTaskOLIVIA",
+    #     fabric_conn_id=FABRIC_CONN_ID,
+    #     workspace_id=WORKSPACE_ID,
+    #     item_id=PL_Load_OLIVIA_ID,
+    #     timeout=600,
+    #     deferrable=False,#Variable.get("USE_DEFERRABLE"),
+    #     parm_SourceName="OLIVIA",
+    #     parm_ApplicationName="OLIVIA"
+    # )
 
     # ===================================================
     # BRANCH dbt refresh
@@ -156,5 +156,5 @@ with DAG(
     # PARALLEL EXECUTION
     # ===================================================
 
-    wait_for_files >> [run_pipeline_SALESFORCE, run_pipeline_OLIVIA]# >> dbt_job_run
+    wait_for_files# >> [run_pipeline_SALESFORCE, run_pipeline_OLIVIA]# >> dbt_job_run
     

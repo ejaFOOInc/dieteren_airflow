@@ -9,7 +9,7 @@ from airflow.sensors.python import PythonSensor
 def run_python_sensor(
     task_id :str,
     conn_id :str,
-    server :str,
+    sql_server :str,
     database :str,
     table_name :str,
     file_count_limit :int
@@ -20,7 +20,7 @@ def run_python_sensor(
         python_callable = sensor_function,
         op_kwargs = {
             'FABRIC_CONN_ID':conn_id,
-            'server': server,
+            'server': sql_server,
             'database': database,
             'table_name': table_name,
             'file_count_limit': file_count_limit
