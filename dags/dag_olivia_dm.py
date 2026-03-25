@@ -2,20 +2,20 @@ import logging
 
 from datetime import datetime, timedelta
 from airflow import DAG
-from airflow.sensors.python import PythonSensor
-from airflow.operators.python import PythonOperator
-from airflow.operators.bash import BashOperator
+# from airflow.sensors.python import PythonSensor
+# from airflow.operators.python import PythonOperator
+# from airflow.operators.bash import BashOperator
 
-from airflow.providers.microsoft.fabric.operators.run_item import MSFabricRunJobOperator
-from airflow.providers.microsoft.fabric.operators.run_item import MSFabricPipelineJobParameters
-from airflow.providers.dbt.cloud.operators.dbt import DbtCloudRunJobOperator
+# from airflow.providers.microsoft.fabric.operators.run_item import MSFabricRunJobOperator
+# from airflow.providers.microsoft.fabric.operators.run_item import MSFabricPipelineJobParameters
+# from airflow.providers.dbt.cloud.operators.dbt import DbtCloudRunJobOperator
 
 from airflow.models import Variable
 
-# from plugins.sqldb_helpers import sensor_function
 from plugins.callback import success_callback, failure_callback
-from plugins.fabric_run_pipeline import fabric_run_pipeline
 from plugins.run_python_sensor import run_python_sensor
+from plugins.fabric_run_pipeline import fabric_run_pipeline
+from plugins.run_dbt_job import dbt_run_job
 
 # =============================================================================
 # GIT Synced Airflow
@@ -125,9 +125,17 @@ with DAG(
     # BRANCH dbt refresh
     # ===================================================
 
-    # DBT_ACCOUNT_ID = Variable.get("dbt_account_id")
-    # DBT_OLIVIA_DM_JOB_ID = Variable.get("dbt_Olivia_DM_jobid")
-    
+    DBT_ACCOUNT_ID = Variable.get("dbt_account_id") ## unused - to be removed
+    DBT_OLIVIA_DM_JOB_ID = Variable.get("dbt_Olivia_DM_jobid")
+
+    # dbt_job =  dbt_run_job(
+    #     task_id="run_olivia_dm",
+    #     conn_id="dbt_cloud",
+    #     job_id=DBT_OLIVIA_DM_JOB_ID,
+    #     defferable=False,
+    #     trigger_reason="Triggered by Airflow"
+    # )
+
     # dbt_job_run = DbtCloudRunJobOperator(
     #     task_id = "run_dbt_job",
 
