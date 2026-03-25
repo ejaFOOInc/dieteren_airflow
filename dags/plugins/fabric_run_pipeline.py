@@ -11,7 +11,8 @@ def fabric_run_pipeline(
         timeout :int,
         deferrable :bool,
         parm_SourceName :str,
-        parm_ApplicationName :str
+        parm_ApplicationName :str,
+        enable :bool
 ):
     
     logger = logging.getLogger("airflow.task")

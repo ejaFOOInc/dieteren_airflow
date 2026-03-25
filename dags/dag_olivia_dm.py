@@ -12,9 +12,10 @@ from airflow.providers.dbt.cloud.operators.dbt import DbtCloudRunJobOperator
 
 from airflow.models import Variable
 
-from plugins.sqldb_helpers import sensor_function
+# from plugins.sqldb_helpers import sensor_function
 from plugins.callback import success_callback, failure_callback
 from plugins.fabric_run_pipeline import fabric_run_pipeline
+from plugins.run_python_sensor import run_python_sensor
 
 # =============================================================================
 # GIT Synced Airflow
@@ -81,19 +82,13 @@ with DAG(
     # BRANCH SENSOR
     # ===================================================
 
-    wait_for_files = PythonSensor(
-        task_id = 'wait_for_sql_data',
-        python_callable = sensor_function,
-        op_kwargs = {
-            'FABRIC_CONN_ID':FABRIC_CONN_ID,
-            'server': SQL_SERVER,
-            'database': SQL_DATABASE,
-            'table_name': TABLE_NAME,
-            'file_count_limit': 2
-        },
-        # mode = 'reschedule',
-        poke_interval = 5,
-        timeout = 3600
+    wait_for_files = run_python_sensor(
+        task_id="wait_for_sql_data",
+        conn_id=FABRIC_CONN_ID,
+        sql_server=SQL_SERVER,
+        database=SQL_DATABASE,
+        table_name=TABLE_NAME,
+        file_count_limit=2
     )
     
     # ===================================================
@@ -110,20 +105,6 @@ with DAG(
         parm_SourceName="SALESFORCE",
         parm_ApplicationName="SALESFORCE"
     )
-    # run_pipeline_SALESFORCE = MSFabricRunJobOperator(
-    #     task_id="runPipelineTaskSALESFORCE",
-    #     fabric_conn_id=FABRIC_CONN_ID,
-    #     workspace_id=WORKSPACE_ID,  # WS_Analytical_Raw_[DV, QA]
-    #     item_id=PL_Load_SALESFORCE_ID,  # PL_Load_SALESFORCE
-    #     job_type="Pipeline",
-    #     timeout=600,
-    #     deferrable=Variable.get("USE_DEFERRABLE"),
-    #     job_params= MSFabricPipelineJobParameters()
-    #         .set_parameter("SourceName", "SALESFORCE")
-    #         .set_parameter("ApplicationName", "SALESFORCE")
-    #         .set_parameter("ObjectName", "[object Object]")
-    #         .to_json()
-    # )
 
     # ===================================================
     # BRANCH OLIVIA
@@ -140,55 +121,40 @@ with DAG(
         parm_ApplicationName="OLIVIA"
     )
 
-    # run_pipeline_OLIVIA= MSFabricRunJobOperator(
-    #     task_id="runPipelineTaskOLIVIA",
-    #     fabric_conn_id=FABRIC_CONN_ID,
-    #     workspace_id=WORKSPACE_ID,  # WS_Analytical_Raw_[DV, QA]
-    #     item_id=PL_Load_OLIVIA_ID,  # PL_Load_OLIVIA
-    #     job_type="Pipeline",
-    #     timeout=600,
-    #     deferrable=Variable.get("USE_DEFERRABLE"),
-    #     job_params= MSFabricPipelineJobParameters()
-    #         .set_parameter("SourceName", "OLIVIA")
-    #         .set_parameter("ApplicationName", "OLIVIA")
-    #         .set_parameter("ObjectName", "[object Object]")
-    #         .to_json()
-    # )
-
     # ===================================================
     # BRANCH dbt refresh
     # ===================================================
 
-    DBT_ACCOUNT_ID = Variable.get("dbt_account_id")
-    DBT_OLIVIA_DM_JOB_ID = Variable.get("dbt_Olivia_DM_jobid")
+    # DBT_ACCOUNT_ID = Variable.get("dbt_account_id")
+    # DBT_OLIVIA_DM_JOB_ID = Variable.get("dbt_Olivia_DM_jobid")
     
-    dbt_job_run = DbtCloudRunJobOperator(
-        task_id = "run_dbt_job",
+    # dbt_job_run = DbtCloudRunJobOperator(
+    #     task_id = "run_dbt_job",
 
-        ## Airflow connection
-        dbt_cloud_conn_id = "dbt_cloud",
+    #     ## Airflow connection
+    #     dbt_cloud_conn_id = "dbt_cloud",
 
-        ## dbt Cloud job
-        job_id = DBT_OLIVIA_DM_JOB_ID,
+    #     ## dbt Cloud job
+    #     job_id = DBT_OLIVIA_DM_JOB_ID,
 
-        ## CLEAN PRODUCTION SETTINGS
-        wait_for_termination = True,
-        check_interval = 60,
-        timeout = 600,
+    #     ## CLEAN PRODUCTION SETTINGS
+    #     wait_for_termination = True,
+    #     check_interval = 60,
+    #     timeout = 600,
 
-        ## saving workers
-        deferrable = False,
+    #     ## saving workers
+    #     deferrable = False,
 
-        ## observability
-        ## additional_run_config = {
-        ##     "cause": "Triggered by Airflow"
-        ## }
-        trigger_reason = "Triggered from Fabric Airflow"
-    )
+    #     ## observability
+    #     ## additional_run_config = {
+    #     ##     "cause": "Triggered by Airflow"
+    #     ## }
+    #     trigger_reason = "Triggered from Fabric Airflow"
+    # )
 
     # ===================================================
     # PARALLEL EXECUTION
     # ===================================================
 
-    wait_for_files >> [run_pipeline_SALESFORCE, run_pipeline_OLIVIA] >> dbt_job_run
+    wait_for_files >> [run_pipeline_SALESFORCE, run_pipeline_OLIVIA]# >> dbt_job_run
     
