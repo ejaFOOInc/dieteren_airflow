@@ -1,1 +1,1 @@
-
+"""Airflow plugins package."""
