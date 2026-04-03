@@ -1,4 +1,5 @@
 import logging
+import pendelum
 
 from datetime import datetime, timedelta
 from airflow import DAG
@@ -70,7 +71,7 @@ default_args = {
 with DAG(
     dag_id=f'DAG_Oliva_{ENV}',
     default_args=default_args,
-    start_date=datetime(2026, 1, 1),
+    start_date=pendelum.datetime(2026, 1, 1, tz="UTC"),
     schedule_interval="30 7 * * *",
     catchup=False,
     on_success_callback=success_callback,

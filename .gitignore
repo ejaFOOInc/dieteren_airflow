@@ -1,0 +1,4 @@
+*.sh
+airflow.venv/
+airflow/
+.python-version
