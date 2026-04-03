@@ -12,7 +12,7 @@ from airflow import DAG
 
 from airflow.models import Variable
 
-from plugins.callback import success_callback, failure_callback
+from callback import success_callback, failure_callback
 from plugins.run_python_sensor import run_python_sensor
 from plugins.fabric_run_pipeline import fabric_run_pipeline
 from plugins.run_dbt_job import dbt_run_job
