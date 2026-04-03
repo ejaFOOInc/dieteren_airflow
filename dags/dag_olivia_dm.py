@@ -94,7 +94,7 @@ with DAG(
     # BRANCH TEST
     # ===================================================
 
-    do_something = PythoOperator(
+    do_something = PythonOperator(
         task_id = "Hello there",
         python_callable = hello_world
     )
