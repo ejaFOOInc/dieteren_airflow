@@ -69,6 +69,7 @@ logger = logging.getLogger("airflow.task")
 logger.info("/nUse deferred for this task: xxxxxxx/n")
 
 def hello_world():
+    logger.info("/nUse deferred for this task: xxxxxxx/n")
     logger.info("Hello World, this is output from Fabric Managed Airflow!")
 
 # =============================================================================
