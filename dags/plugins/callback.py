@@ -4,8 +4,10 @@ import logging
 
 from airflow.models import Variable
 
-Variable.set("dv_power_automate_url", "dummy_value")
-Variable.set("dv_dynatrace_url", "dummy_value")
+if Variable.get("dv_power_automate_url", default_var=None) is not None:
+    Variable.set("dv_power_automate_url", "dummy_value")
+if Variable.get("dv_dynatrace_url", default_var=None) is not None:
+    Variable.set("dv_dynatrace_url", "dummy_value")
 
 POWER_AUTOMATE_URL = Variable.get("dv_power_automate_url")
 DYNATRACE_URL = Variable.get("dv_dynatrace_url")
