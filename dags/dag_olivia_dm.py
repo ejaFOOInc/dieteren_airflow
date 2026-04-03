@@ -66,7 +66,7 @@ ENV = 'dv' # development
 # PL_Load_OLIVIA_ID = Variable.get("qa_pipeline_Olivia_id")
 
 logger = logging.getLogger("airflow.task")
-logger.info(f"/nUse deferred for this task: xxxxxxx/n")
+logger.info("/nUse deferred for this task: xxxxxxx/n")
 
 def hello_world():
     logger.info("Hello World, this is output from Fabric Managed Airflow!")
