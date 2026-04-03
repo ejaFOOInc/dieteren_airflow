@@ -12,7 +12,7 @@ from airflow import DAG
 
 from airflow.models import Variable
 
-from callback import success_callback, failure_callback
+from plugins.callback import success_callback, failure_callback
 from plugins.run_python_sensor import run_python_sensor
 from plugins.fabric_run_pipeline import fabric_run_pipeline
 from plugins.run_dbt_job import dbt_run_job
@@ -73,8 +73,8 @@ with DAG(
     start_date=datetime(2026, 1, 1),
     schedule_interval="30 7 * * *",
     catchup=False,
-    on_success_callback=success_callback,
-    on_failure_callback=failure_callback,
+    # on_success_callback=success_callback,
+    # on_failure_callback=failure_callback,
     tags=['fabric', 'dbt', ENV]
 ) as dag:
 
