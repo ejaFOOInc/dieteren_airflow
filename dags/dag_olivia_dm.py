@@ -95,7 +95,7 @@ with DAG(
     # ===================================================
 
     do_something = PythonOperator(
-        task_id = "Hello there",
+        task_id = "Hello_there",
         python_callable = hello_world
     )
 
