@@ -66,11 +66,12 @@ ENV = 'dv' # development
 # PL_Load_OLIVIA_ID = Variable.get("qa_pipeline_Olivia_id")
 
 logger = logging.getLogger("airflow.task")
-logger.info("/nUse deferred for this task: xxxxxxx/n")
+# logger.info("/nUse deferred for this task: xxxxxxx/n")
 
 def hello_world():
-    logger.info("/nUse deferred for this task: xxxxxxx/n")
-    logger.info("Hello World, this is output from Fabric Managed Airflow!")
+    print("test message")
+    # logger.info("/nUse deferred for this task: xxxxxxx/n") # <-- logging only works inside of def
+    # logger.info("Hello World, this is output from Fabric Managed Airflow!")
 
 # =============================================================================
 # DAG Definition
