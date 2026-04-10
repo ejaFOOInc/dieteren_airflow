@@ -43,6 +43,8 @@ ENV = Variable.get("ENV")
 # logger = logging.getLogger("airflow.task")
 # logger.info("/nUse deferred for this task: xxxxxxx/n")
 
+print(f"1 - test message, starting for dag in environment: {ENV}")
+
 def hello_world():
     print(f"test message, starting for dag in environment: {ENV}")
     # logger.info("/nUse deferred for this task: xxxxxxx/n") # <-- logging only works inside of def
