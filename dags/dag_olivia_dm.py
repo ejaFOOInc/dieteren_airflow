@@ -18,58 +18,33 @@ from plugins.fabric_run_pipeline import fabric_run_pipeline
 # from plugins.run_dbt_job import dbt_run_job
 
 # =============================================================================
-# GIT Synced Airflow
-# =============================================================================
-
-# =============================================================================
-# Configuration 
-# =============================================================================
-# DV connection
-ENV = 'dv' # development
-# FABRIC_CONN_ID = "demo-fabric-tenant"
-
-# UNCOMMENT AFTER TESTING
-# FABRIC_CONN_ID = Variable.get(f"{ENV}_envar_fabric_conn_id")
-# QA connection
-# FABRIC_CONN_ID = "fabric-tenant-QA"
-
-# =============================================================================
 # Configuration - polling system details
 # =============================================================================
-# WS_Technical_DV.DB-Technical
 
-# UNCOMMENT AFTER TESTING
-# SQL_SERVER = Variable.get(f"{ENV}_sqlserver_dbtechnical")
-# SQL_DATABASE = Variable.get(f"{ENV}_sqlserver_dbtechnical_database")
-# TABLE_NAME = Variable.get(f"{ENV}_sqlserver_dbtechnical_databasetable")
+SQL_SERVER = Variable.get(f"sqlserver_dbtechnical")
+SQL_DATABASE = Variable.get(f"sqlserver_dbtechnical_database")
+TABLE_NAME = Variable.get(f"sqlserver_dbtechnical_databasetable")
 
 # =============================================================================
 # Configuration - Fabric Pipeline details
 # =============================================================================
-# WS_Analytical_Raw_DV
 
-# UNCOMMENT AFTER TESTING
-# WORKSPACE_ID = Variable.get(f"{ENV}_airflow_workspace_id")
-# WS_Analytical_Raw_DV.Source.SALESFORCE.PL_Load_SALESFORCE
+WORKSPACE_ID = Variable.get(f"airflow_workspace_id")
 
-# UNCOMMENT AFTER TESTING
-# PL_Load_SALESFORCE_ID = Variable.get(f"{ENV}_pipeline_Salesforce_id")
-# WS_Analytical_Raw_DV.Source.OLIVIA.PL_Load_OLIVIA
+PL_Load_SALESFORCE_ID = Variable.get(f"pipeline_Salesforce_id")
+PL_Load_OLIVIA_ID = Variable.get(f"pipeline_Olivia_id")
 
-# UNCOMMENT AFTER TESTING
-# PL_Load_OLIVIA_ID = Variable.get(f"{ENV}_pipeline_Olivia_id")
-# WS_Analytical_Raw_QA
-# WORKSPACE_ID = Variable.get("qa_airflow_workspace_id")
-# WS_Analytical_Raw_QA.Source.SALESFORCE.PL_Load_SALESFORCE
-# PL_Load_SALESFORCE_ID = Variable.get("qa_pipeline_Salesforce_id")
-# WS_Analytical_Raw_QA.Source.OLIVIA.PL_Load_OLIVIA
-# PL_Load_OLIVIA_ID = Variable.get("qa_pipeline_Olivia_id")
+# =============================================================================
+# Configuration
+# =============================================================================
+
+ENV = Variable.get("ENV")
 
 logger = logging.getLogger("airflow.task")
 # logger.info("/nUse deferred for this task: xxxxxxx/n")
 
 def hello_world():
-    print("test message")
+    print(f"test message, starting for dag in environment: {ENV}")
     # logger.info("/nUse deferred for this task: xxxxxxx/n") # <-- logging only works inside of def
     # logger.info("Hello World, this is output from Fabric Managed Airflow!")
 
@@ -90,7 +65,7 @@ with DAG(
     catchup=False,
     # on_success_callback=success_callback,
     # on_failure_callback=failure_callback,
-    tags=['fabric', 'dbt', ENV]
+    tags=['fabric', 'dbt']
 ) as dag:
     # ===================================================
     # BRANCH TEST
