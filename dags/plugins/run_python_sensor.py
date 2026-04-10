@@ -4,6 +4,7 @@ import pyodbc
 import requests
 
 import auth
+import sql_conn
 
 from azure.identity import ClientSecretCredential
 from airflow.hooks.base import BaseHook
@@ -24,7 +25,7 @@ def run_python_sensor(
         task_id = task_id,
         python_callable = sensor_function,
         op_kwargs = {
-            'CONN_ID':conn_id,
+            'CONN_ID': conn_id,
             'server': sql_server,
             'database': database,
             'table_name': table_name,
@@ -35,20 +36,33 @@ def run_python_sensor(
         timeout = 3600
     )
 
-def get_connection_string(server :str, database :str, isEncryptedConnection :bool, isTrustedServerCertificate :bool, connectionTimeout :int):
-    """
+# def get_connection_string(
+#     server :str,
+#     database :str,
+#     isEncryptedConnection :bool,
+#     isTrustedServerCertificate :bool,
+#     connectionTimeout :int
+# ):
+#     """
     
-    """
-    return (
-        f"Driver={{ODBC Driver 18 for SQL Server}};"
-        f"Server={server};"
-        f"Database={database};"
-        f"Encrypt={isEncryptedConnection};"
-        f"TrustServerCertificate={isTrustedServerCertificate};"
-        f"Connection Timeout={connectionTimeout};"
-    )
+#     """
+#     return (
+#         f"Driver={{ODBC Driver 18 for SQL Server}};"
+#         f"Server={server};"
+#         f"Database={database};"
+#         f"Encrypt={isEncryptedConnection};"
+#         f"TrustServerCertificate={isTrustedServerCertificate};"
+#         f"Connection Timeout={connectionTimeout};"
+#     )
 
-def sensor_function(CONN_ID, server :str, database :str, table_name :str, file_count_limit :int, **context):
+def sensor_function(
+    CONN_ID,
+    server :str,
+    database :str,
+    table_name :str,
+    file_count_limit :int,
+    **context
+):
     """
     
     Args:
@@ -105,7 +119,7 @@ def sensor_function(CONN_ID, server :str, database :str, table_name :str, file_c
     #  1256 is the magic attribute ID for SQL_COPT_SS_ACCESS_TOKEN
     SQL_COPT_SS_ACCESS_TOKEN = 1256
     try:
-        conn_str = get_connection_string(server, database, isEncryptedConnection, isTrustedServerCertificate, connectionTimeout)
+        conn_str = sql_conn.get_connection_string(server, database, isEncryptedConnection, isTrustedServerCertificate, connectionTimeout)
         logger.info(f"Successfully created SQL Server Connection string for {server}.{database}")
     except Exception as e:
         logger.error(f"FAILED to create connection string for {server}.{database}")

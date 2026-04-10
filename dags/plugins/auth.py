@@ -1,6 +1,7 @@
 import struct
 import logging
 import requests
+
 from airflow.hooks.base import BaseHook
 
 
