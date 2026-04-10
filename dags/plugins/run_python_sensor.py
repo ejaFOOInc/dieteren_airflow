@@ -2,11 +2,14 @@ import struct
 import logging
 import pyodbc
 import requests
+
+import auth
+
 from azure.identity import ClientSecretCredential
 from airflow.hooks.base import BaseHook
 from airflow.sensors.python import PythonSensor
 
-from auth import get_auth_token
+# from plugins.auth import get_auth_token
 
 def run_python_sensor(
     task_id :str,
@@ -109,7 +112,7 @@ def sensor_function(CONN_ID, server :str, database :str, table_name :str, file_c
 
     try:
         logger.info(f"Connecting for execution - to Fabric SQL: {server}.{database}")
-        with pyodbc.connect(conn_str, attrs_before={SQL_COPT_SS_ACCESS_TOKEN: get_auth_token(connection=CONN_ID)}) as conn:
+        with pyodbc.connect(conn_str, attrs_before={SQL_COPT_SS_ACCESS_TOKEN: auth.get_auth_token(connection=CONN_ID)}) as conn:
             with conn.cursor() as cursor:
                 query = f"SELECT COUNT(*) FROM {table_name}"
                 cursor.execute(query)
