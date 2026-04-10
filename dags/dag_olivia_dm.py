@@ -40,7 +40,7 @@ PL_Load_OLIVIA_ID = Variable.get(f"pipeline_Olivia_id")
 
 ENV = Variable.get("ENV")
 
-logger = logging.getLogger("airflow.task")
+# logger = logging.getLogger("airflow.task")
 # logger.info("/nUse deferred for this task: xxxxxxx/n")
 
 def hello_world():
