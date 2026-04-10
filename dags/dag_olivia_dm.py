@@ -40,6 +40,7 @@ PL_Load_OLIVIA_ID = Variable.get(f"pipeline_Olivia_id")
 # =============================================================================
 
 ENV = Variable.get("ENV")
+TENANT_CONN = 'fabric_conn'
 
 # logger = logging.getLogger("airflow.task")
 # logger.info("/nUse deferred for this task: xxxxxxx/n")
@@ -68,16 +69,8 @@ with DAG(
     catchup=False,
     # on_success_callback=success_callback,
     # on_failure_callback=failure_callback,
-    tags=['fabric', 'dbt']
+    tags=['fabric', 'dbt', ENV]
 ) as dag:
-    # ===================================================
-    # BRANCH TEST
-    # ===================================================
-
-    # do_something = PythonOperator(
-        # task_id = "Hello_there",
-        # python_callable = hello_world
-    # )
 
     # ===================================================
     # BRANCH CONFIG LOG
@@ -95,14 +88,14 @@ with DAG(
     # BRANCH SENSOR
     # ===================================================
 
-    # wait_for_files = run_python_sensor(
-        # task_id="wait_for_sql_data",
-        # conn_id=FABRIC_CONN_ID,
-        # sql_server=SQL_SERVER,
-        # database=SQL_DATABASE,
-        # table_name=TABLE_NAME,
-        # file_count_limit=2
-    # )
+    wait_for_files = run_python_sensor(
+        task_id="wait_for_sql_data",
+        conn_id=TENANT_CONN,
+        sql_server=SQL_SERVER,
+        database=SQL_DATABASE,
+        table_name=TABLE_NAME,
+        file_count_limit=2
+    )
     
     # ===================================================
     # BRANCH SALESFORCE
