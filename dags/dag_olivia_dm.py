@@ -44,10 +44,10 @@ ENV = Variable.get("ENV")
 # logger = logging.getLogger("airflow.task")
 # logger.info("/nUse deferred for this task: xxxxxxx/n")
 
-print(f"1 - test message, starting for dag in environment: {ENV}")
+# print(f"1 - test message, starting for dag in environment: {ENV}")
 
-def hello_world():
-    print(f"test message, starting for dag in environment: {ENV}")
+# def hello_world():
+    # print(f"test message, starting for dag in environment: {ENV}")
     # logger.info("/nUse deferred for this task: xxxxxxx/n") # <-- logging only works inside of def
     # logger.info("Hello World, this is output from Fabric Managed Airflow!")
 
@@ -57,7 +57,7 @@ def hello_world():
 default_args = {
     'owner': 'airflow',
     'retries': 0,
-    'retry_delay': timedelta(minutes=2),
+    'retry_delay': timedelta(minutes=2)
 }
 
 with DAG(
@@ -74,10 +74,10 @@ with DAG(
     # BRANCH TEST
     # ===================================================
 
-    do_something = PythonOperator(
-        task_id = "Hello_there",
-        python_callable = hello_world
-    )
+    # do_something = PythonOperator(
+        # task_id = "Hello_there",
+        # python_callable = hello_world
+    # )
 
     # ===================================================
     # BRANCH CONFIG LOG
@@ -85,7 +85,10 @@ with DAG(
 
     log_config = PythonOperator(
         task_id = "Log_config",
-        python_callable = config_logger(ENV)
+        python_callable = config_logger,
+        op_kwargs = {
+            "environment": ENV
+        }
     )
 
     # ===================================================
