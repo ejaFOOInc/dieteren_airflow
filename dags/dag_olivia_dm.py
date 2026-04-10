@@ -12,6 +12,7 @@ from airflow.operators.python import PythonOperator
 
 from airflow.models import Variable
 
+from plugins.config_logger import config_logger
 from plugins.callback import success_callback, failure_callback
 from plugins.run_python_sensor import run_python_sensor
 from plugins.fabric_run_pipeline import fabric_run_pipeline
@@ -76,6 +77,15 @@ with DAG(
     do_something = PythonOperator(
         task_id = "Hello_there",
         python_callable = hello_world
+    )
+
+    # ===================================================
+    # BRANCH CONFIG LOG
+    # =================================================== 
+
+    log_config = PythonOperator(
+        task_id = "Log_config",
+        python_callable = config_logger(ENV)
     )
 
     # ===================================================
