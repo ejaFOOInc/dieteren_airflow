@@ -3,8 +3,8 @@ import logging
 import pyodbc
 import requests
 
-import auth
-import sql_conn
+from . import auth
+from . import sql_conn
 
 from azure.identity import ClientSecretCredential
 from airflow.hooks.base import BaseHook
