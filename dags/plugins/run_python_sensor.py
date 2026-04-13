@@ -56,7 +56,7 @@ def run_python_sensor(
 #     )
 
 def sensor_function(
-    CONN_ID,
+    conn_id,
     server :str,
     database :str,
     table_name :str,
@@ -126,7 +126,7 @@ def sensor_function(
 
     try:
         logger.info(f"Connecting for execution - to Fabric SQL: {server}.{database}")
-        with pyodbc.connect(conn_str, attrs_before={SQL_COPT_SS_ACCESS_TOKEN: auth.get_auth_token(connection=CONN_ID)}) as conn:
+        with pyodbc.connect(conn_str, attrs_before={SQL_COPT_SS_ACCESS_TOKEN: auth.get_auth_token(connection=conn_id)}) as conn:
             with conn.cursor() as cursor:
                 query = f"SELECT COUNT(*) FROM {table_name}"
                 cursor.execute(query)
