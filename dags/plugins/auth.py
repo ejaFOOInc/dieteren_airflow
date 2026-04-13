@@ -11,6 +11,7 @@ def get_auth_token(
     logger = logging.getLogger("airflow.task")
     
     try:
+        logger.info(f"Getting hook on connection: {connection}")
         conn = BaseHook.get_connection(connection)
         extra = conn.extra_dejson
 
