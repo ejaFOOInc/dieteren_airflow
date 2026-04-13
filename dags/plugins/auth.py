@@ -25,6 +25,7 @@ def get_auth_token(
         	"client_secret": CLIENT_SECRET,
         	"scope": "https://api.fabric.microsoft.com/.default"
     	}
+        logger.info(data)
         r = requests.post(url, data=data)
         logger.info(r.json())
         token_str = r.json()["access_token"]
