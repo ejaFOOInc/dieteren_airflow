@@ -25,7 +25,7 @@ def run_python_sensor(
         task_id = task_id,
         python_callable = sensor_function,
         op_kwargs = {
-            'CONN_ID': conn_id,
+            'conn_id': conn_id,
             'server': sql_server,
             'database': database,
             'table_name': table_name,
