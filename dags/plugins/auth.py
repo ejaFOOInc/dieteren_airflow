@@ -35,7 +35,7 @@ def get_auth_token(
             token_bytes,
         )
 
-        logger.info("✅ Successfully retrieved Connection Token")
+        logger.info("Successfully retrieved Connection Token")
         logger.info(f"The full url constructed: {url}")
         logger.info(f"The data posted to the url: {data}")
         logger.info(f"Full airflow connection: {conn}")
@@ -45,5 +45,5 @@ def get_auth_token(
         return token_struct
     
     except Exception as e:
-        logger.error(f"❌ FAILURE to retrieve Connection Token - for connection {connection}")
+        logger.error(f"FAILURE to retrieve Connection Token - for connection {connection}")
         raise
