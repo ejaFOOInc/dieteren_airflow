@@ -14,7 +14,7 @@ def get_auth_token(
         conn = BaseHook.get_connection(connection)
         extra = conn.extra_dejson
 
-        TENANT_ID = extra.get("tenantID") or extra.get("tenant_id")
+        TENANT_ID = extra.get("tenantId") or extra.get("tenant_id")
         CLIENT_ID = conn.login or extra.get("clientId") or extra.get("client_id")
         CLIENT_SECRET = conn.password or extra.get("clientSecret") or extra.get("client_secret")
 
