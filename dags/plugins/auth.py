@@ -26,6 +26,7 @@ def get_auth_token(
         	"scope": "https://api.fabric.microsoft.com/.default"
     	}
         r = requests.post(url, data=data)
+        logger.info(r.json())
         token_str = r.json()["access_token"]
         # Pack the token into the format required by the ODBC driver
         token_bytes = token_str.encode("utf-16-le")
