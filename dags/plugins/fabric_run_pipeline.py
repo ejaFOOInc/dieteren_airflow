@@ -5,7 +5,7 @@ import logging
 
 def fabric_run_pipeline(
         task_id :str,
-        fabric_conn_id :str,
+        conn_id :str,
         workspace_id :str,
         item_id :str,
         timeout :int,
@@ -20,7 +20,7 @@ def fabric_run_pipeline(
     
     return MSFabricRunJobOperator(
         task_id=task_id,
-        fabric_conn_id=fabric_conn_id,
+        fabric_conn_id=conn_id,
         workspace_id=workspace_id,
         item_id=item_id,
         job_type="Pipeline",

@@ -69,7 +69,7 @@ default_args = {
 }
 
 with DAG(
-    dag_id=f'DAG_Oliva_{ENV}',
+    dag_id=f'DAG_SalesForce_{ENV}',
     default_args=default_args,
     start_date=datetime(2026, 1, 1),
     schedule_interval="30 7 * * *",
@@ -94,30 +94,30 @@ with DAG(
     # ===================================================
     # TASK SENSOR - OLIVIA
     # ===================================================
-    QUERY_SENSOR_OLIVIA = "EXEC [input].[CheckImportCompleteness] 'OLIVIA'"
-    wait_for_olivia_data = run_python_sensor(
-        task_id = "wait_for_olivia_data",
-        token = TOKEN,
-        sql_server = SQL_SERVER,
-        database = SQL_DATABASE,
-        query = QUERY_SENSOR_OLIVIA,
-        file_count_limit = 11
-    )
+    # QUERY_SENSOR_OLIVIA = "EXEC [input].[CheckImportCompleteness] 'OLIVIA'"
+    # wait_for_olivia_data = run_python_sensor(
+    #     task_id = "wait_for_olivia_data",
+    #     token = TOKEN,
+    #     sql_server = SQL_SERVER,
+    #     database = SQL_DATABASE,
+    #     query = QUERY_SENSOR_OLIVIA,
+    #     file_count_limit = 11
+    # )
 
     # ===================================================
     # TASK SENSOR - SALESFORCE
     # ===================================================
-    # QUERY_SENSOR_SALESFORCE = """
-    # SELECT 1
-    # """
-    # wait_for_salesforce_data = run_python_sensor(
-    #     task_id = "wait_for_salesforce_data",
-    #     token = TOKEN,
-    #     sql_server = SQL_SERVER,
-    #     database = SQL_DATABASE,
-    #     query = QUERY_SENSOR_SALESFORCE,
-    #     file_count_limit = 2
-    # )
+    QUERY_SENSOR_SALESFORCE = """
+    SELECT 1
+    """
+    wait_for_salesforce_data = run_python_sensor(
+        task_id = "wait_for_salesforce_data",
+        token = TOKEN,
+        sql_server = SQL_SERVER,
+        database = SQL_DATABASE,
+        query = QUERY_SENSOR_SALESFORCE,
+        file_count_limit = 2
+    )
     
     # ===================================================
     # TASK SALESFORCE PIPELINE
@@ -138,16 +138,16 @@ with DAG(
     # TASK OLIVIA PIPELINE
     # ===================================================
 
-    run_pipeline_OLIVIA = fabric_run_pipeline(
-        task_id="runPipelineTaskOLIVIA",
-        conn_id=TENANT_CONN,
-        workspace_id=WORKSPACE_ID,
-        item_id=PL_Load_OLIVIA_ID,
-        timeout=600,
-        deferrable=False,#Variable.get("USE_DEFERRABLE"),
-        parm_SourceName="OLIVIA",
-        parm_ApplicationName="OLIVIA"
-    )
+    # run_pipeline_OLIVIA = fabric_run_pipeline(
+    #     task_id="runPipelineTaskOLIVIA",
+    #     conn_id=TENANT_CONN,
+    #     workspace_id=WORKSPACE_ID,
+    #     item_id=PL_Load_OLIVIA_ID,
+    #     timeout=600,
+    #     deferrable=False,#Variable.get("USE_DEFERRABLE"),
+    #     parm_SourceName="OLIVIA",
+    #     parm_ApplicationName="OLIVIA"
+    # )
 
     # ===================================================
     # TASK dbt refresh OLIVIA
@@ -194,6 +194,7 @@ with DAG(
     # ===================================================
 
     [
-        [wait_for_olivia_data >> run_pipeline_OLIVIA]
-    ] #>> [run_pipeline_SALESFORCE, ]# >> dbt_job_run
+        [wait_for_olivia_data >> run_pipeline_OLIVIA],
+        [wait_for_salesforce_data]
+     ] #>> [run_pipeline_SALESFORCE, ]# >> dbt_job_run
     
