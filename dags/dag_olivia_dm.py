@@ -120,12 +120,12 @@ with DAG(
     )
     
     # ===================================================
-    # TASK SALESFORCE
+    # TASK SALESFORCE PIPELINE
     # ===================================================
 
     # run_pipeline_SALESFORCE = fabric_run_pipeline(
     #     task_id="runPipelineTaskSALESFORCE",
-    #     fabric_conn_id=FABRIC_CONN_ID,
+    #     fabric_conn_id=TENANT_CONN,
     #     workspace_id=WORKSPACE_ID,
     #     item_id=PL_Load_SALESFORCE_ID,
     #     timeout=600,
@@ -135,19 +135,19 @@ with DAG(
     # )
 
     # ===================================================
-    # TASK OLIVIA
+    # TASK OLIVIA PIPELINE
     # ===================================================
 
-    # run_pipeline_OLIVIA = fabric_run_pipeline(
-    #     task_id="runPipelineTaskOLIVIA",
-    #     fabric_conn_id=FABRIC_CONN_ID,
-    #     workspace_id=WORKSPACE_ID,
-    #     item_id=PL_Load_OLIVIA_ID,
-    #     timeout=600,
-    #     deferrable=False,#Variable.get("USE_DEFERRABLE"),
-    #     parm_SourceName="OLIVIA",
-    #     parm_ApplicationName="OLIVIA"
-    # )
+    run_pipeline_OLIVIA = fabric_run_pipeline(
+        task_id="runPipelineTaskOLIVIA",
+        fabric_conn_id=TENANT_CONN,
+        workspace_id=WORKSPACE_ID,
+        item_id=PL_Load_OLIVIA_ID,
+        timeout=600,
+        deferrable=False,#Variable.get("USE_DEFERRABLE"),
+        parm_SourceName="OLIVIA",
+        parm_ApplicationName="OLIVIA"
+    )
 
     # ===================================================
     # TASK dbt refresh OLIVIA
@@ -194,11 +194,7 @@ with DAG(
     # ===================================================
 
     [
-        [
-            wait_for_olivia_data
-        ],
-        [
-            wait_for_salesforce_data
-        ]
-     ] #>> [run_pipeline_SALESFORCE, run_pipeline_OLIVIA]# >> dbt_job_run
+        [wait_for_olivia_data >> run_pipeline_OLIVIA],
+        [wait_for_salesforce_data]
+     ] #>> [run_pipeline_SALESFORCE, ]# >> dbt_job_run
     
