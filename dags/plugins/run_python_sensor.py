@@ -133,7 +133,8 @@ def sensor_function(
                 # query = f"SELECT COUNT(*) FROM {table_name}"
                 cursor.execute(query)
                 count = cursor.fetchone()[0]
-                logger.info(f"Query successful. Found {count} records!")
+                logging_result = "Polling condition has been met." if (count == 1) else "BUT polling condition has not been met!"
+                logger.info(f"Query successful. {logging_result}")
                 return count == 1
     except Exception as e:
         logger.error(f"FAILED Database connection: {str(e)}\n{conn_str}")
