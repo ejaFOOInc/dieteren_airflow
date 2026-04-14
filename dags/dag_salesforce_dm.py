@@ -125,7 +125,7 @@ with DAG(
 
     run_pipeline_SALESFORCE = fabric_run_pipeline(
         task_id="runPipelineTaskSALESFORCE",
-        fabric_conn_id=TENANT_CONN,
+        conn_id=TENANT_CONN,
         workspace_id=WORKSPACE_ID,
         item_id=PL_Load_SALESFORCE_ID,
         timeout=600,
