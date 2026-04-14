@@ -219,5 +219,12 @@ with DAG(
     # PARALLEL EXECUTION
     # ===================================================
 
-    [wait_for_olivia_data, wait_for_salesforce_data] #>> [run_pipeline_SALESFORCE, run_pipeline_OLIVIA]# >> dbt_job_run
+    [
+        [
+            wait_for_olivia_data
+        ],
+        [
+            wait_for_salesforce_data
+        ]
+     ] #>> [run_pipeline_SALESFORCE, run_pipeline_OLIVIA]# >> dbt_job_run
     
