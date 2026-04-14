@@ -194,6 +194,6 @@ with DAG(
     # ===================================================
 
     [
-        [wait_for_salesforce_data]
+        [wait_for_salesforce_data >> run_pipeline_SALESFORCE]
     ]
     
