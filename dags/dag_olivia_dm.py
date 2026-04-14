@@ -117,9 +117,7 @@ with DAG(
         ON I.[ObjectName] = REF.[ObjectName]
     WHERE
         I.[SourceName] = 'OLIVIA'
-        AND CAST(I.[LoadDateTime] AS DATE) = CAST(GETDATE() -1 AS DATE)
-    ORDER BY
-        I.[ObjectName]
+        AND CAST(I.[LoadDateTime] AS DATE) = CAST(GETDATE() AS DATE)
     """
     wait_for_olivia_data = run_python_sensor(
         task_id = "wait_for_olivia_data",
@@ -127,7 +125,7 @@ with DAG(
         sql_server = SQL_SERVER,
         database = SQL_DATABASE,
         query = QUERY_SENSOR_OLIVIA,
-        file_count_limit = 2
+        file_count_limit = 11
     )
 
     # ===================================================
