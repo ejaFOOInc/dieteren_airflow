@@ -14,10 +14,10 @@ from airflow.sensors.python import PythonSensor
 
 def run_python_sensor(
     task_id :str,
-    conn_id :str,
+    token :str,
     sql_server :str,
     database :str,
-    table_name :str,
+    query :str,
     file_count_limit :int
 ):
 
@@ -25,10 +25,10 @@ def run_python_sensor(
         task_id = task_id,
         python_callable = sensor_function,
         op_kwargs = {
-            'conn_id': conn_id,
+            'token': token,
             'server': sql_server,
             'database': database,
-            'table_name': table_name,
+            'query': query,
             'file_count_limit': file_count_limit
         },
         # mode = 'reschedule',
@@ -56,19 +56,20 @@ def run_python_sensor(
 #     )
 
 def sensor_function(
-    conn_id,
+    token :str,
     server :str,
     database :str,
-    table_name :str,
+    query :str,
     file_count_limit :int,
     **context
 ):
     """
     
     Args:
+        token (string): security-token
         server (string): 
         database (string):
-        table_name (string):
+        query (string):
     """
 
     logger = logging.getLogger("airflow.task")
@@ -126,9 +127,10 @@ def sensor_function(
 
     try:
         logger.info(f"Connecting for execution - to Fabric SQL: {server}.{database}")
-        with pyodbc.connect(conn_str, attrs_before={SQL_COPT_SS_ACCESS_TOKEN: auth.get_auth_token(connection=conn_id)}) as conn:
+        # with pyodbc.connect(conn_str, attrs_before={SQL_COPT_SS_ACCESS_TOKEN: auth.get_auth_token(connection=conn_id)}) as conn:
+        with pyodbc.connect(conn_str, attrs_before={SQL_COPT_SS_ACCESS_TOKEN: token}) as conn:
             with conn.cursor() as cursor:
-                query = f"SELECT COUNT(*) FROM {table_name}"
+                # query = f"SELECT COUNT(*) FROM {table_name}"
                 cursor.execute(query)
                 count = cursor.fetchone()[0]
                 logger.info(f"Query successful. Found {count} records!")

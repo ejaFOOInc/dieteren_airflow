@@ -18,13 +18,17 @@ from plugins.run_python_sensor import run_python_sensor
 from plugins.fabric_run_pipeline import fabric_run_pipeline
 # from plugins.run_dbt_job import dbt_run_job
 
+from plugins import auth
+
 # =============================================================================
 # Configuration - polling system details
 # =============================================================================
 
 SQL_SERVER = Variable.get(f"sqlserver_dbtechnical")
 SQL_DATABASE = Variable.get(f"sqlserver_dbtechnical_database")
-TABLE_NAME = Variable.get(f"sqlserver_dbtechnical_databasetable")
+# No more need for the table name in the variables
+# replaced by QUERY_[source] in sensor task definitions
+# TABLE_NAME = Variable.get(f"sqlserver_dbtechnical_databasetable")
 
 # =============================================================================
 # Configuration - Fabric Pipeline details
@@ -52,6 +56,9 @@ TENANT_CONN = 'fabric_conn'
     # logger.info("/nUse deferred for this task: xxxxxxx/n") # <-- logging only works inside of def
     # logger.info("Hello World, this is output from Fabric Managed Airflow!")
 
+# getting the token
+TOKEN = auth.get_auth_token(connection=TENANT_CONN)
+
 # =============================================================================
 # DAG Definition
 # =============================================================================
@@ -73,7 +80,7 @@ with DAG(
 ) as dag:
 
     # ===================================================
-    # BRANCH CONFIG LOG
+    # TASK CONFIG LOG
     # =================================================== 
 
     log_config = PythonOperator(
@@ -85,20 +92,61 @@ with DAG(
     )
 
     # ===================================================
-    # BRANCH SENSOR
+    # TASK SENSOR - OLIVIA
     # ===================================================
+    QUERY_SENSOR_OLIVIA = """
+    WITH REF AS (
+        SELECT 'ACCSXXT' AS [ObjectName]
+        UNION SELECT 'CARCNFT'
+        UNION SELECT 'CFRPRXT'
+        UNION SELECT 'CUSTXXT'
+        UNION SELECT 'DSCNTXT'
+        UNION SELECT 'EDI_TRIGGERS'
+        UNION SELECT 'EQUIPXT'
+        UNION SELECT 'INCENTT'
+        UNION SELECT 'NADIN_INVALID_PRICES'
+        UNION SELECT 'OFORXXT'
+        UNION SELECT 'PRICEXT'
+    )
 
-    wait_for_files = run_python_sensor(
-        task_id="wait_for_sql_data",
-        conn_id=TENANT_CONN,
-        sql_server=SQL_SERVER,
-        database=SQL_DATABASE,
-        table_name=TABLE_NAME,
-        file_count_limit=2
+    SELECT
+        COUNT(1)
+    FROM
+        [input].[ImportTableHistory] I
+    INNER JOIN REF
+        ON I.[ObjectName] = REF.[ObjectName]
+    WHERE
+        I.[SourceName] = 'OLIVIA'
+        AND CAST(I.[LoadDateTime] AS DATE) = CAST(GETDATE() -1 AS DATE)
+    ORDER BY
+        I.[ObjectName]
+    """
+    wait_for_olivia_data = run_python_sensor(
+        task_id = "wait_for_olivia_data",
+        token = TOKEN,
+        sql_server = SQL_SERVER,
+        database = SQL_DATABASE,
+        query = QUERY_SENSOR_OLIVIA,
+        file_count_limit = 2
+    )
+
+    # ===================================================
+    # TASK SENSOR - SALESFORCE
+    # ===================================================
+    QUERY_SENSOR_SALESFORCE = """
+    SELECT 1
+    """
+    wait_for_salesforce_data = run_python_sensor(
+        task_id = "wait_for_salesforce_data",
+        token = TOKEN,
+        sql_server = SQL_SERVER,
+        database = SQL_DATABASE,
+        query = QUERY_SENSOR_SALESFORCE,
+        file_count_limit = 2
     )
     
     # ===================================================
-    # BRANCH SALESFORCE
+    # TASK SALESFORCE
     # ===================================================
 
     # run_pipeline_SALESFORCE = fabric_run_pipeline(
@@ -113,7 +161,7 @@ with DAG(
     # )
 
     # ===================================================
-    # BRANCH OLIVIA
+    # TASK OLIVIA
     # ===================================================
 
     # run_pipeline_OLIVIA = fabric_run_pipeline(
@@ -128,7 +176,7 @@ with DAG(
     # )
 
     # ===================================================
-    # BRANCH dbt refresh
+    # TASK dbt refresh OLIVIA
     # ===================================================
 
     # UNCOMMENT AFTER TESTING
@@ -171,5 +219,5 @@ with DAG(
     # PARALLEL EXECUTION
     # ===================================================
 
-    # wait_for_files# >> [run_pipeline_SALESFORCE, run_pipeline_OLIVIA]# >> dbt_job_run
+    [wait_for_olivia_data, wait_for_salesforce_data] #>> [run_pipeline_SALESFORCE, run_pipeline_OLIVIA]# >> dbt_job_run
     
