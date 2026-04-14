@@ -134,7 +134,7 @@ def sensor_function(
                 cursor.execute(query)
                 count = cursor.fetchone()[0]
                 logger.info(f"Query successful. Found {count} records!")
-                return count == file_count_limit
+                return count == 1
     except Exception as e:
         logger.error(f"FAILED Database connection: {str(e)}\n{conn_str}")
         raise

@@ -94,31 +94,7 @@ with DAG(
     # ===================================================
     # TASK SENSOR - OLIVIA
     # ===================================================
-    QUERY_SENSOR_OLIVIA = """
-    WITH REF AS (
-        SELECT 'ACCSXXT' AS [ObjectName]
-        UNION SELECT 'CARCNFT'
-        UNION SELECT 'CFRPRXT'
-        UNION SELECT 'CUSTXXT'
-        UNION SELECT 'DSCNTXT'
-        UNION SELECT 'EDI_TRIGGERS'
-        UNION SELECT 'EQUIPXT'
-        UNION SELECT 'INCENTT'
-        UNION SELECT 'NADIN_INVALID_PRICES'
-        UNION SELECT 'OFORXXT'
-        UNION SELECT 'PRICEXT'
-    )
-
-    SELECT
-        COUNT(1)
-    FROM
-        [input].[ImportTableHistory] I
-    INNER JOIN REF
-        ON I.[ObjectName] = REF.[ObjectName]
-    WHERE
-        I.[SourceName] = 'OLIVIA'
-        AND CAST(I.[LoadDateTime] AS DATE) = CAST(GETDATE() AS DATE)
-    """
+    QUERY_SENSOR_OLIVIA = "EXEC [input].[CheckImportCompleteness] 'OLIVIA'"
     wait_for_olivia_data = run_python_sensor(
         task_id = "wait_for_olivia_data",
         token = TOKEN,
