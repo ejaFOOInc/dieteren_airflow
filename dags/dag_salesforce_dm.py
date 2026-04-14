@@ -123,16 +123,16 @@ with DAG(
     # TASK SALESFORCE PIPELINE
     # ===================================================
 
-    # run_pipeline_SALESFORCE = fabric_run_pipeline(
-    #     task_id="runPipelineTaskSALESFORCE",
-    #     fabric_conn_id=TENANT_CONN,
-    #     workspace_id=WORKSPACE_ID,
-    #     item_id=PL_Load_SALESFORCE_ID,
-    #     timeout=600,
-    #     deferrable=False,#Variable.get("USE_DEFERRABLE"),
-    #     parm_SourceName="SALESFORCE",
-    #     parm_ApplicationName="SALESFORCE"
-    # )
+    run_pipeline_SALESFORCE = fabric_run_pipeline(
+        task_id="runPipelineTaskSALESFORCE",
+        fabric_conn_id=TENANT_CONN,
+        workspace_id=WORKSPACE_ID,
+        item_id=PL_Load_SALESFORCE_ID,
+        timeout=600,
+        deferrable=False,#Variable.get("USE_DEFERRABLE"),
+        parm_SourceName="SALESFORCE",
+        parm_ApplicationName="SALESFORCE"
+    )
 
     # ===================================================
     # TASK OLIVIA PIPELINE
@@ -194,7 +194,6 @@ with DAG(
     # ===================================================
 
     [
-        [wait_for_olivia_data >> run_pipeline_OLIVIA],
         [wait_for_salesforce_data]
-     ] #>> [run_pipeline_SALESFORCE, ]# >> dbt_job_run
+    ]
     
